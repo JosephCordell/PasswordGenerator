@@ -1,72 +1,105 @@
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
+var lengthEl = document.querySelector("#length")
+var lowerEl = document.querySelector("#lowercase")
+var upperEl = document.querySelector("#uppercase")
+var numbersEl = document.querySelector("#numbers")
+var symbollEl = document.querySelector("#symbols")
 
 var length;
-var charset = ""
-txt = `How long would you like your password? (8-128 characters)`
+var charset = ``;
+var lower = true;
+var upper = true;
+var nummber = true;
+var symmbol = true;
 
-// Write password to the #password input
+lowerEl.addEventListener('change', function(){
+  if (this.checked){
+    lower = true;
+  } else {
+    lower = false;
+  }
+})
+upperEl.addEventListener('change', function(){
+  if (this.checked){
+    upper = true;
+  } else {
+    upper = false;
+  }
+})
+numbersEl.addEventListener('change', function(){
+  if (this.checked){
+    nummber = true;
+  } else {
+    nummber = false;
+  }
+})
+symbollEl.addEventListener('change', function(){
+  if (this.checked){
+    symmbol = true;
+  } else {
+    symmbol = false;
+  }
+})
+
 function writePassword() {
+  falsecheck()
   charset = ``
-  length = createLength(length);
-  charset = lowercase(charset)
-  charset = uppercase(charset)
-  charset = numbers(charset)
-  charset = symboll(charset)
-  console.log(`you made it!! ${charset}`)
+  length = +lengthEl.value
+  lengthCheck(length);
+  lowercase(lower);
+  uppercase(upper);
+  numbers(nummber);
+  symboll(symmbol);
   var password = generatePassword(length, charset);
   var passwordText = document.querySelector("#password");
-
   passwordText.value = password; 
-
 }
 
-// Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
 
+function falsecheck() {
+  if (lower === false && upper === false && symmbol === false && nummber === false){
+    alert(`Please check a box to generate a password`)
+  } 
+}
+
+function lengthCheck(lengthy) {
+  if (lengthy > 7 && lengthy < 127) {
+  } else {
+    alert(`Please choose a password length between 8 and 128`)
+    length = 0;
+  }
+}
 
 function generatePassword(length, charset) {
-  var retVal = "";
-
+  var finalPassword = "";
   for (var i = 0, n = charset.length; i < length; ++i) {
-      retVal += charset.charAt(Math.floor(Math.random() * n));
+    finalPassword += charset.charAt(Math.floor(Math.random() * n));
   }
-  return retVal;
+  return finalPassword;
 }
 
-function createLength(newLength) {
-  newLength = prompt(txt, `8`);
-  if (newLength < 8 || newLength > 128) {
-    txt = `Try again, you must choose between 8 and 128.`
-    createLength(newLength)
-  }
-    return newLength
-}
-
-function lowercase(charset) {
-    if (confirm(`Do you want lower case characters?`)){
+function lowercase(lower) {
+    if (lower === true){
       charset += `abcdefghijklmnopqrstuvwxyz`
     } 
-    return charset
 }
 
-function uppercase(charset) {
-  if (confirm(`Do you want upper case characters?`)){
+function uppercase(upper) {
+  if (upper === true){
     charset += `ABCDEFGHIJKLMNOPQRSTUVWXYZ`
   } 
-  return charset
 }
 
-function numbers(charset) {
-  if (confirm(`Do you want numbers?`)){
+function numbers(nummber) {
+  if (nummber === true){
     charset += `0123456789`
   } 
-  return charset
 }
 
-function symboll(charset) {
-  if (confirm(`Do you want symbols?`)){
+function symboll(symmbol) {
+  if (symmbol === true){
     charset += `!@#$%^&*`
   } 
-  return charset
 }
